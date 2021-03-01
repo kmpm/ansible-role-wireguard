@@ -1,0 +1,8 @@
+---
+# defaults file for wireguard
+
+wireguard_listen_port: 1194
+wireguard_interface: wg0
+wireguard_group: wireguard
+
+wireguard_address: 0.0.0.0
