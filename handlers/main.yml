@@ -1,2 +1,6 @@
 ---
 # handlers file for wireguard
+- name: restart wireguard
+  service:
+    name: "wg-quick@{{ wireguard_interface }}"
+    state: restarted
