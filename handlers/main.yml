@@ -4,3 +4,8 @@
   service:
     name: "wg-quick@{{ wireguard_interface }}"
     state: restarted
+
+
+- name: update apt
+  apt:
+    update_cache: yes

@@ -5,11 +5,11 @@
 - name: gather os specific tasks
   include_tasks: "{{ item }}"
   with_first_found:
-    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
-    - "{{ ansible_distribution }}.yml"
+    - "install-{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version}}.yml"
+    - "install-{{ ansible_distribution | lower }}.yml"
   tags: wireguard.install
 
-- name: Setup interface and peers
+- name: "Setup interface and peers. {{ wireguard_group }}"
   template:
     src: interface.conf.j2
     dest: "/etc/wireguard/{{ wireguard_interface }}.conf"
@@ -34,7 +34,9 @@
   with_items: "{{ groups[wireguard_group] }}"
   loop_control:
     loop_var: host
-  when: host != inventory_hostname and hostvars[host]['wireguard_address'] is defined
+  when: 
+    - wireguard_group is defined
+    - host != inventory_hostname and hostvars[host]['wireguard_address'] is defined
   tags: wireguard.config
 
 - name: Enable and start WireGuard service

@@ -3,6 +3,8 @@ Address = {{ wireguard_address }}
 PrivateKey = {{ wireguard_private_key }}
 ListenPort = {{ wireguard_listen_port }}
 
+{% if wireguard_group is defined %}
+# ansible managed wireguard group endpoints
 {% for host in groups[wireguard_group] %}
 {% if host != inventory_hostname and hostvars[host]['wireguard_address'] is defined %}
 [Peer]
@@ -11,3 +13,4 @@ AllowedIps = {{ hostvars[host]['wireguard_address'] }}/32
 Endpoint = {{ hostvars[host]['wireguard_endpoint'] | default(hostvars[host]['ansible_facts']['default_ipv4']['address']) }}:{{ hostvars[host]['wireguard_listen_port']| default(wireguard_listen_port) }}
 {% endif %}
 {% endfor %}
+{% endif %}

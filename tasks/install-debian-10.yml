@@ -3,17 +3,12 @@
   ansible.builtin.apt_repository:
     repo: deb http://deb.debian.org/debian buster-backports main contrib non-free
     filename: buster-backports.list
-  register: backports
+  notify: update apt
 
-- name: update apt
-  apt:
-    update_cache: yes
-  when: backports.changed
-
-- name: Install Linux kernel headers
-  apt:
-    name: linux-headers-amd64
-  when: ansible_distribution == 'Debian'
+# - name: Install Linux kernel headers
+#   apt:
+#     name: linux-headers-amd64
+#   when: ansible_distribution == 'Debian'
   
 - name: install wireguard
   apt:
@@ -27,4 +22,4 @@
 - name: reboot was needed
   reboot:
     reboot_timeout: 300
-  when: reboot_required.stat.exists == true
+  when: reboot_required.stat.exists
